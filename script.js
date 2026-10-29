@@ -6,6 +6,10 @@ const currentYear = document.querySelector("#current-year");
 const themeToggle = document.querySelector(".theme-toggle");
 const themeLabel = themeToggle.querySelector(".theme-label");
 const themeTransitionDuration = 800;
+const revealSections = [...document.querySelectorAll("main .section")];
+const hero = document.querySelector(".hero");
+let heroShadowFrame = 0;
+let heroPointer = null;
 
 const setTheme = (isDark) => {
   document.body.classList.toggle("dark-mode", isDark);
@@ -64,3 +68,49 @@ window.addEventListener("resize", updateActiveLink);
 updateActiveLink();
 
 currentYear.textContent = new Date().getFullYear();
+
+const updateHeroShadow = () => {
+  heroShadowFrame = 0;
+  if (!hero || !heroPointer) {
+    hero?.style.setProperty("--hero-shadow-opacity", "0");
+    return;
+  }
+
+  const bounds = hero.getBoundingClientRect();
+  const centerX = bounds.left + bounds.width / 2;
+  const centerY = bounds.top + bounds.height / 2;
+  hero.style.setProperty("--hero-shadow-x", `${(centerX - heroPointer.x) * 0.12}px`);
+  hero.style.setProperty("--hero-shadow-y", `${(centerY - heroPointer.y) * 0.12}px`);
+  hero.style.setProperty("--hero-shadow-opacity", ".32");
+};
+
+const queueHeroShadowUpdate = () => {
+  if (!heroShadowFrame) heroShadowFrame = window.requestAnimationFrame(updateHeroShadow);
+};
+
+hero?.addEventListener("pointermove", (event) => {
+  heroPointer = { x: event.clientX, y: event.clientY };
+  queueHeroShadowUpdate();
+});
+
+hero?.addEventListener("pointerleave", () => {
+  heroPointer = null;
+  queueHeroShadowUpdate();
+});
+
+revealSections.forEach((section, index) => {
+  section.classList.add("reveal-section");
+  if (index % 2 === 1) section.classList.add("reveal-from-right");
+});
+
+if ("IntersectionObserver" in window) {
+  const sectionObserver = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      entry.target.classList.toggle("is-visible", entry.isIntersecting);
+    });
+  }, { threshold: .15 });
+
+  revealSections.forEach((section) => sectionObserver.observe(section));
+} else {
+  revealSections.forEach((section) => section.classList.add("is-visible"));
+}
