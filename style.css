@@ -341,8 +341,9 @@ address {
 @media (max-width: 700px) {
   .menu-toggle { display: flex; }
 
-  .site-nav { flex-wrap: wrap; }
-  .theme-toggle { margin-left: auto; }
+  .site-nav { flex-wrap: nowrap; }
+  .menu-toggle { margin-left: auto; }
+  .theme-toggle { flex: 0 0 auto; }
 
   .nav-links {
     position: absolute;
@@ -364,6 +365,15 @@ address {
   .about-grid, .contact-grid, .projects-grid { grid-template-columns: 1fr; }
   .skills-grid { grid-template-columns: repeat(2, 1fr); }
   .project-card { min-height: 320px; }
+}
+
+@media (max-width: 700px) {
+  .theme-toggle {
+    width: auto;
+    padding-inline: .6rem;
+  }
+
+  .theme-label { display: none; }
 }
 
 body.dark-mode {
