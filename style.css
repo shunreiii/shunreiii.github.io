@@ -342,8 +342,16 @@ address {
   .menu-toggle { display: flex; }
 
   .site-nav { flex-wrap: nowrap; }
-  .menu-toggle { margin-left: auto; }
-  .theme-toggle { flex: 0 0 auto; }
+  .menu-toggle {
+    min-height: 2.85rem;
+    margin-left: auto;
+  }
+  .theme-toggle {
+    flex: 0 0 2.85rem;
+    width: 2.85rem;
+    min-height: 2.85rem;
+    padding: .5rem;
+  }
 
   .nav-links {
     position: absolute;
