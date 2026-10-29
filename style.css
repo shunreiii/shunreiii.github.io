@@ -119,8 +119,8 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
   gap: .5rem;
   width: 8.5rem;
   padding: .5rem .75rem;
-  color: var(--black);
-  background: var(--white);
+  color: var(--white);
+  background: var(--black);
   border: var(--border);
   font: inherit;
   font-size: .75rem;
@@ -130,8 +130,8 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 }
 
 .theme-toggle:hover {
-  color: var(--white);
-  background: var(--black);
+  color: var(--black);
+  background: var(--white);
 }
 
 .theme-icon {
