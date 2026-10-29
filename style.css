@@ -7,6 +7,8 @@
   --border: var(--border-width) solid var(--border-color);
   --space: clamp(1.25rem, 3vw, 3rem);
   --max-width: 1200px;
+  --theme-duration: .8s;
+  --theme-ease: ease-in-out;
 }
 
 * { box-sizing: border-box; }
@@ -113,13 +115,16 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 .theme-toggle {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: .5rem;
+  width: 8.5rem;
   padding: .5rem .75rem;
   color: var(--black);
   background: var(--white);
   border: var(--border);
   font: inherit;
   font-size: .75rem;
+  white-space: nowrap;
   cursor: pointer;
   transition: color .25s ease, background-color .25s ease, border-color .25s ease;
 }
@@ -301,40 +306,28 @@ address {
   transition: opacity .2s ease;
 }
 
-.contact-form {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: .6rem;
+.contact-cta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1.5rem;
 }
 
-label { font-size: .75rem; text-transform: uppercase; }
+.contact-cta p { max-width: 28rem; }
 
-input, textarea, .contact-form button {
-  width: 100%;
+.contact-button {
   padding: .8rem;
   color: var(--black);
   background: var(--white);
   border: var(--border);
-  border-radius: 0;
-  font: inherit;
-  transition: color .25s ease, background-color .25s ease;
+  text-decoration: none;
+  transition: color .25s ease, background-color .25s ease, border-color .25s ease;
 }
 
-textarea { resize: vertical; }
-
-.contact-form button {
-  margin-top: .75rem;
-  cursor: pointer;
-  text-align: left;
-  transition: color .25s ease, background-color .25s ease;
-}
-
-.contact-form button:hover {
+.contact-button:hover {
   color: var(--white);
   background: var(--black);
 }
-
-.form-message { min-height: 1.6em; margin: .25rem 0 0; font-size: .8rem; }
 
 .site-footer {
   margin-top: clamp(5rem, 11vw, 9rem);
@@ -407,9 +400,7 @@ body.dark-mode .project-card,
 body.dark-mode .tags span,
 body.dark-mode .text-link,
 body.dark-mode .contact-details a,
-body.dark-mode input,
-body.dark-mode textarea,
-body.dark-mode .contact-form button,
+body.dark-mode .contact-button,
 body.dark-mode .site-footer,
 body.dark-mode .menu-toggle,
 body.dark-mode .theme-toggle,
@@ -427,14 +418,28 @@ body.dark-mode .nav-links a.active {
 body.theme-transition,
 body.theme-transition * {
   transition-property: color, background-color, border-color, border-width, opacity, transform;
-  transition-duration: .8s !important;
+  transition-duration: var(--theme-duration) !important;
+  transition-timing-function: var(--theme-ease) !important;
+  transition-delay: 0s !important;
+}
+
+body.theme-transition .nav-links a,
+body.theme-transition .project-card .text-link {
+  transition:
+    color var(--theme-duration) var(--theme-ease),
+    background-color var(--theme-duration) var(--theme-ease),
+    border-color var(--theme-duration) var(--theme-ease),
+    border-width var(--theme-duration) var(--theme-ease),
+    opacity var(--theme-duration) var(--theme-ease),
+    transform var(--theme-duration) var(--theme-ease) !important;
+  transition-delay: 0s !important;
 }
 
 body.dark-mode .menu-toggle:hover,
 body.dark-mode .theme-toggle:hover,
 body.dark-mode .skill-box:hover,
 body.dark-mode .project-card:hover,
-body.dark-mode .contact-form button:hover {
+body.dark-mode .contact-button:hover {
   color: #000;
   background: #f5f5f5;
 }

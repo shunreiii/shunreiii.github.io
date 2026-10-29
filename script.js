@@ -2,11 +2,10 @@ const menuToggle = document.querySelector(".menu-toggle");
 const navLinks = document.querySelector(".nav-links");
 const navigationLinks = [...document.querySelectorAll(".nav-links a")];
 const sections = [...document.querySelectorAll("main section[id]")];
-const form = document.querySelector("#contact-form");
-const formMessage = document.querySelector("#form-message");
 const currentYear = document.querySelector("#current-year");
 const themeToggle = document.querySelector(".theme-toggle");
 const themeLabel = themeToggle.querySelector(".theme-label");
+const themeTransitionDuration = 800;
 
 const setTheme = (isDark) => {
   document.body.classList.toggle("dark-mode", isDark);
@@ -25,7 +24,7 @@ themeToggle.addEventListener("click", () => {
   localStorage.setItem("theme", isDark ? "dark" : "light");
   window.setTimeout(() => {
     document.body.classList.remove("theme-transition");
-  }, 800);
+  }, themeTransitionDuration);
 });
 
 // Keep the mobile menu accessible and close it after a navigation selection.
@@ -63,25 +62,5 @@ const updateActiveLink = () => {
 window.addEventListener("scroll", updateActiveLink, { passive: true });
 window.addEventListener("resize", updateActiveLink);
 updateActiveLink();
-
-form.addEventListener("submit", (event) => {
-  event.preventDefault();
-  const name = form.elements.name.value.trim();
-  const email = form.elements.email.value.trim();
-  const message = form.elements.message.value.trim();
-
-  if (!name || !email || !message) {
-    formMessage.textContent = "Please complete all fields before sending.";
-    return;
-  }
-
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-    formMessage.textContent = "Please enter a valid email address.";
-    return;
-  }
-
-  formMessage.textContent = `Thanks, ${name}. Your message is ready to send.`;
-  form.reset();
-});
 
 currentYear.textContent = new Date().getFullYear();
