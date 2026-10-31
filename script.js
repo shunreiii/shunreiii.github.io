@@ -10,6 +10,7 @@ const revealSections = [...document.querySelectorAll("main .section")];
 const hero = document.querySelector(".hero");
 let heroShadowFrame = 0;
 let heroPointer = null;
+let heroMotion = null;
 
 const setTheme = (isDark) => {
   document.body.classList.toggle("dark-mode", isDark);
@@ -71,7 +72,7 @@ currentYear.textContent = new Date().getFullYear();
 
 const updateHeroShadow = () => {
   heroShadowFrame = 0;
-  if (!hero || !heroPointer) {
+  if (!hero || (!heroPointer && !heroMotion)) {
     hero?.style.setProperty("--hero-shadow-opacity", "0");
     return;
   }
@@ -79,8 +80,12 @@ const updateHeroShadow = () => {
   const bounds = hero.getBoundingClientRect();
   const centerX = bounds.left + bounds.width / 2;
   const centerY = bounds.top + bounds.height / 2;
-  hero.style.setProperty("--hero-shadow-x", `${(centerX - heroPointer.x) * 0.12}px`);
-  hero.style.setProperty("--hero-shadow-y", `${(centerY - heroPointer.y) * 0.12}px`);
+  const pointerX = heroPointer ? (centerX - heroPointer.x) * 0.12 : 0;
+  const pointerY = heroPointer ? (centerY - heroPointer.y) * 0.12 : 0;
+  const motionX = heroMotion ? heroMotion.x : 0;
+  const motionY = heroMotion ? heroMotion.y : 0;
+  hero.style.setProperty("--hero-shadow-x", `${pointerX + motionX}px`);
+  hero.style.setProperty("--hero-shadow-y", `${pointerY + motionY}px`);
   hero.style.setProperty("--hero-shadow-opacity", ".32");
 };
 
@@ -88,13 +93,25 @@ const queueHeroShadowUpdate = () => {
   if (!heroShadowFrame) heroShadowFrame = window.requestAnimationFrame(updateHeroShadow);
 };
 
-hero?.addEventListener("pointermove", (event) => {
+window.addEventListener("pointermove", (event) => {
   heroPointer = { x: event.clientX, y: event.clientY };
   queueHeroShadowUpdate();
 });
 
-hero?.addEventListener("pointerleave", () => {
+window.addEventListener("blur", () => {
   heroPointer = null;
+  heroMotion = null;
+  queueHeroShadowUpdate();
+});
+
+window.addEventListener("devicemotion", (event) => {
+  const acceleration = event.accelerationIncludingGravity;
+  if (!acceleration || acceleration.x === null || acceleration.y === null) return;
+
+  heroMotion = {
+    x: Math.max(-32, Math.min(32, -acceleration.x * 2)),
+    y: Math.max(-32, Math.min(32, -acceleration.y * 2)),
+  };
   queueHeroShadowUpdate();
 });
 
